@@ -1,8 +1,5 @@
 <?php
-  require 'app/db.php';
-  require 'app/view.php';
-
-  $conn = connect($config);
+  require 'app/controller.php';
 
   if($conn){
     $rows = query($conn,'category');

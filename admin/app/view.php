@@ -1,6 +1,6 @@
 <?php
 
-function view($path,$data=null){
+function view($path,$data = null){
   if($data){
     extract($data);
   }

@@ -9,14 +9,14 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
-      <a class="navbar-brand" href="/blog/admin">ADMIN PANEL</a>
+      <a class="navbar-brand" href="/blog/admin/home.php">ADMIN PANEL</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="/blog">New Blog</a>
+            <a class="nav-link" href="/blog/admin/addblog.php">New Blog</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/blog/admin/author.php">Author</a>
@@ -29,8 +29,11 @@
           </li>
         </ul>
       </div>
-      <div class="">
-        <button type="button" class="btn btn-default" name="button">Log-out</button>
+      <div class="col-2">
+        <span class="text-success"><?= $_SESSION['author_name']?></span>
+        <a href="/blog/admin/logout.php">
+          <button type="button" class="btn btn btn-outline-danger">Log-out</button>
+        </a>
       </div>
     </nav>
     <br>
