@@ -2,5 +2,10 @@
   require 'app/controller.php';
 
   is_login();
-  view('home');
+  $rows=query($conn,'post');
+
+
+  view('home',array(
+    'rows' => $rows
+  ));
 ?>
