@@ -2,6 +2,22 @@
   include 'app/database.php';
   $obj = new Database();
   //var_dump($obj);
+  $table = "author";
+  $order_by = array(
+      // 'select' => 'author_name',
+      // 'order_by' => 'id DESC'
+      'where' => array('id' => 1,
+      'author_name' => 'naznin nahar')
+  );
+
+    $data = $obj->select($table,$order_by);
+    if(!empty($data)){
+      echo "<pre>";
+      print_r($data);
+    }else{
+      echo "query problem";
+    };
+
  ?>
 
  <!DOCTYPE html>

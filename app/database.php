@@ -26,7 +26,62 @@ class Database
   }
 
 //Read Data
-  public function select(){}
+  public function select($table,$data = array()){
+    // echo $table;
+    // print_r($data);
+    // exit();
+    $sql = "SELECT ";
+    $sql .= array_key_exists('select',$data)? $data['select'] : '*';
+    $sql .=" FROM ".$table;
+    if(array_key_exists("where",$data)){
+      $sql .= " WHERE ";
+      $i=0;
+      foreach ($data['where'] as $key => $value) {
+        $add .= ($i > 0)?" AND ":"";
+        $sql .= "$add"."$key= :$key";
+        $i++;
+      }
+    }
+    if(array_key_exists("order_by",$data)){
+      $sql .= " ORDER BY ".$data['order_by'];
+    }
+    if(array_key_exists("start",$data) && array_key_exists("limit",$data)){
+      $sql .= " LIMIT ".$data['start'].",".$data['limit'];
+    }elseif (array_key_exists("limit",$data)) {
+      $sql .= " LIMIT ".$data['limit'];
+    }
+
+    $query = $this->pdo->prepare($sql);
+
+    if(array_key_exists("where",$data)){
+      foreach ($data['where'] as $key => $add) {
+        $query->bindValue(":$key",$add);
+      }
+    }
+    $query->execute();
+
+    if(array_key_exists("return_type", $data)){
+      switch ($data['return_type']) {
+        case 'count':
+          $value = $query->rowCount();
+          break;
+        case 'single':
+          $value = $query->fetch(PDO::FETCH_ASSOC);
+          break;
+
+        default:
+          $value = '';
+          break;
+      }
+    }else{
+      if($query->rowCount() > 0){
+        $value = $query->fetchAll(PDO::FETCH_ASSOC);
+      }
+    }
+
+    return !empty($value)? $value:false;
+
+  }
 //Insert Data
   public function insert(){}
 //Delete Data
