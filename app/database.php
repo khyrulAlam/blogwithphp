@@ -37,6 +37,7 @@ class Database
       $sql .= " WHERE ";
       $i=0;
       foreach ($data['where'] as $key => $value) {
+        $add = '';
         $add .= ($i > 0)?" AND ":"";
         $sql .= "$add"."$key= :$key";
         $i++;
@@ -83,7 +84,29 @@ class Database
 
   }
 //Insert Data
-  public function insert(){}
+  public function insert($table,$data){
+    if(!empty($data) && is_array($data)){
+      $keys   = '';
+      $values = '';
+      $i = 0;
+      $keys   =  implode(',',array_keys($data));
+      $values =  implode(', :',array_keys($data));
+      $sql = "INSERT INTO ".$table." (".$keys.") VALUES (".$values.")";
+      $query = $this->pdo->prepare($sql);
+
+      foreach ($data as $key => $value) {
+        $query->bindValue(":$key", $value);
+      }
+      $result = $query->execute();
+      if ($result) {
+        $lastid = $this->pdo->lastInsertId();
+        return $lastid;
+      }else{
+        return false;
+      }
+    }
+
+  }
 //Delete Data
   public function delect(){}
 //Edit Data
