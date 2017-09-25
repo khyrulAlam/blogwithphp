@@ -6,8 +6,7 @@
   $order_by = array(
       // 'select' => 'author_name',
       // 'order_by' => 'id DESC'
-      'where' => array('id' => 1,
-      'author_name' => 'naznin nahar')
+      'where' => array('id' => 2)
   );
 
     $data = $obj->select($table,$order_by);

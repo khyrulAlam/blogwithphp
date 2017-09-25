@@ -1,7 +1,10 @@
 <?php
   require 'app/controller.php';
+  require 'app/Database.php';
+  $db = new Database();
 
- $ctg = query($conn,'category');
+ //$ctg = query($conn,'category');
+ $ctg = $db->select('category');
  $data = [];
 
    if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -21,18 +24,32 @@
        $img = "../assets/img/".$uniqname;
 
        if(move_uploaded_file($imgtmp,$img)){
-            $result = insert($conn,
-                   "INSERT INTO  post(category_id,author_id,title,body,img,tag)
-                   values(:category_id,:author_id,:title,:body,:img,:tag)",
-                   array(
-                     'category_id' => $category_id,
-                     'author_id'  => $author_id,
-                     'title'  => $title,
-                     'body' => $body,
-                     'img'  => $img,
-                     'tag'  => $tag
-                   )
-                 );
+            // $result = insert($conn,
+            //        "INSERT INTO  post(category_id,author_id,title,body,img,tag)
+            //        values(:category_id,:author_id,:title,:body,:img,:tag)",
+            //        array(
+            //          'category_id' => $category_id,
+            //          'author_id'  => $author_id,
+            //          'title'  => $title,
+            //          'body' => $body,
+            //          'img'  => $img,
+            //          'tag'  => $tag
+            //        )
+            //      );
+            $values = array(
+               'category_id' => $category_id,
+               'author_id'  => $author_id,
+               'title'  => $title,
+               'body' => $body,
+               'img'  => $img,
+               'tag'  => $tag
+            );
+            // echo "<pre>";
+            // print_r($values);
+            // exit();
+            $table = 'post';
+            $result = $db->insert($table,$values);
+            //var_dump($result);
           if($result){
             $data['sucs'] = "inset successfully";
           }

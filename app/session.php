@@ -29,4 +29,8 @@ class Session
     }
   }
 
+  public static function unset(){
+    session_unset();
+  }
+
 }
