@@ -1,7 +1,11 @@
 <?php
   require 'app/controller.php';
-
-  if(isset($_SESSION['author_name'])){
+  //require 'app/Database.php';
+  //require 'app/Session.php';
+  $db = new Database();
+  Session::init();
+  $author_name = Session::get('author_name');
+  if(!empty($author_name)){
     header('location:/blog/admin/home.php');
   };
 
@@ -10,11 +14,17 @@
     $user = trim($_POST['username']);
     $pass = trim($_POST['password']);
     if(!empty($user) && !empty($pass)){
-      $result = login($conn,$user,$pass);
+      $check = array(
+        'where' => array('author_name' => $user,'password'=> md5($pass)),
+        'return_type' => 'single'
+      );
+      $result = $db->select('author',$check);
       if (!$result) {
         $data['error'] = "User Or Password doesn't match";
       }else{
-        $_SESSION['author_name'] = $result['author_name'];
+        //$_SESSION['author_name'] = $result['author_name'];
+        $author_name = $result['author_name'];
+        Session::set('author_name',$author_name);
         header('location:/blog/admin/home.php');
       }
     }else{

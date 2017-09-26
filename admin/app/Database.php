@@ -110,12 +110,61 @@ class Database
 
   }
   //Update Data
-  public function update($table,$data){
+  public function update($table,$data,$condition){
+    if(!empty($data) && is_array($data)){
+      $keys   = '';
+      $values = '';
+      $i = 0;
+      foreach ($data as $key => $value) {
+        $add = '';
+        $add = ($i > 0)?" , ":"";
+        $keys .= "$add"."$key= :$key";
+        $i++;
+      }
 
+      if(!empty($condition) && is_array($condition)){
+        $values .= " WHERE ";
+        $i = 0;
+        foreach ($condition as $key => $value) {
+          $add = '';
+          $add = ($i > 0)?" AND ":"";
+          $values .= "$add"."$key= :$key";
+          $i++;
+        }
+      }
+
+      $sql = "UPDATE ".$table." SET ".$keys.$values;
+      $query = $this->pdo->prepare($sql);
+      foreach ($data as $key => $value) {
+        $query->bindValue(":$key", $value);
+      }
+      $result = $query->execute();
+      return $result ? $query->rowCount(): false;
+    }else{
+      return false;
+    }
   }
 //Delete Data
-  public function delect(){}
-//Edit Data
-  public function edit(){}
+  public function delect($table,$data){
+    if(!empty($data) && is_array($data)){
+      $values .= " WHERE ";
+      $i = 0;
+      foreach ($data as $key => $value) {
+        $add = '';
+        $add = ($i > 0)?" AND ":"";
+        $values .= "$add"."$key= :$key";
+        $i++;
+      }
+    $sql = "DELETE FROM".$table.$values;
+    $query = $this->pdo->prepare($sql);
+    foreach ($data as $key => $value) {
+      $query->bindValue(":$key", $value);
+    }
+    $delete = $query->execute();
+    return $delete ? true:false;
+
+    }
+
+  }
 
 }
