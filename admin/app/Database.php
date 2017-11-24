@@ -109,8 +109,9 @@ class Database
     }
 
   }
-  //Update Data
+    //Update Data
   public function update($table,$data,$condition){
+
     if(!empty($data) && is_array($data)){
       $keys   = '';
       $values = '';
@@ -132,10 +133,12 @@ class Database
           $i++;
         }
       }
-
       $sql = "UPDATE ".$table." SET ".$keys.$values;
       $query = $this->pdo->prepare($sql);
       foreach ($data as $key => $value) {
+        $query->bindValue(":$key", $value);
+      }
+      foreach ($condition as $key => $value) {
         $query->bindValue(":$key", $value);
       }
       $result = $query->execute();
