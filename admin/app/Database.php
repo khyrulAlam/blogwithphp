@@ -149,16 +149,18 @@ class Database
   }
 //Delete Data
   public function delect($table,$data){
+    $values = '';
     if(!empty($data) && is_array($data)){
       $values .= " WHERE ";
       $i = 0;
       foreach ($data as $key => $value) {
         $add = '';
         $add = ($i > 0)?" AND ":"";
-        $values .= "$add"."$key= :$key";
+        $values .= "$add"."$key = $value";
         $i++;
       }
-    $sql = "DELETE FROM".$table.$values;
+    $sql = "DELETE FROM ".$table.$values;
+
     $query = $this->pdo->prepare($sql);
     foreach ($data as $key => $value) {
       $query->bindValue(":$key", $value);
